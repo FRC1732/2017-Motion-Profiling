@@ -23,9 +23,15 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {
+		System.out.println("Robot Init Started");
 		RobotMap = new RobotMap2017PracticeBot();
 		oi = new OI(OI.dualJoystick);
 		drivetrain = new Drivetrain();
+
+		// access each element to make paths
+		for (MotionPath mp : MotionPath.values()) {
+			// Trajectory t = mp.leftTraj;
+		}
 	}
 
 	@Override
@@ -39,7 +45,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = new FollowTrajectory(MotionPath.STRAIGHTFAR.leftTraj, MotionPath.STRAIGHTFAR.rightTraj);
+		autonomousCommand = new FollowTrajectory(MotionPath.ARC.leftTraj, MotionPath.ARC.rightTraj);
 		// autonomousCommand = new DriveArc(DriveArc.degreesToDistance(90, 50),
 		// 50, 600, 400, true);
 		// schedule the autonomous command (example)

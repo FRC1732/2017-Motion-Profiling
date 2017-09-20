@@ -28,10 +28,14 @@ public class Path {
 	public static final double TIME_STEP = 0.01;
 
 	public static final Trajectory.Config basicConfig = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,
-			Trajectory.Config.SAMPLES_HIGH, 0.01, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60),
+			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60),
 			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60),
 			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_JERK / 60));
 
+	public static final Trajectory.Config slowConfig = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,
+			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60 / 5),
+			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60 / 5),
+			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_JERK / 60));
 	private final Waypoint[] points;
 	private final Trajectory.Config config;
 
@@ -39,13 +43,16 @@ public class Path {
 	public final Trajectory rightTraj;
 
 	public Path(Waypoint[] points, Trajectory.Config config) {
+		System.out.println("Making Path");
+		long start = System.currentTimeMillis();
 		this.points = points;
 		this.config = config;
 		Trajectory traj = Pathfinder.generate(points, config);
 		TankModifier tank = new TankModifier(traj);
-		tank.modify(Drivetrain.inchesToRev(Drivetrain.ROBOT_WIDTH_INCHES));
+		tank.modify(Drivetrain.ROBOT_WIDTH_INCHES);
 		leftTraj = tank.getLeftTrajectory();
 		rightTraj = tank.getRightTrajectory();
+		System.out.println("Time to make path: " + (System.currentTimeMillis() - start));
 	}
 
 }

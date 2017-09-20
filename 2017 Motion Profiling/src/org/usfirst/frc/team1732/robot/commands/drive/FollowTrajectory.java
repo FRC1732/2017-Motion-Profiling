@@ -24,7 +24,8 @@ public class FollowTrajectory extends Command {
 	@Override
 	protected void initialize() {
 		Robot.drivetrain.setControlMode(TalonControlMode.MotionProfile);
-
+		System.out.println("Left Length: " + leftTraj.length());
+		System.out.println("Right Length: " + rightTraj.length());
 		Robot.drivetrain.startMotionProfile(leftTraj, rightTraj);
 	}
 

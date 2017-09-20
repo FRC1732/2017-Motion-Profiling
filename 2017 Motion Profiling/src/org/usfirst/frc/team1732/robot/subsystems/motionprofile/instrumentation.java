@@ -23,46 +23,59 @@
  * 
  */
 package org.usfirst.frc.team1732.robot.subsystems.motionprofile;
+
+import org.usfirst.frc.team1732.robot.subsystems.Drivetrain;
+
 import com.ctre.CANTalon;
 
 public class instrumentation {
 
-	static double timeout = 0;
-	static int count = 0;
+	String name;
 
-	private static final String []_table = {" Dis "," En  ","Hold "};
-	
+	public instrumentation(String name) {
+		this.name = name;
+	}
+
+	double timeout = 0;
+	int count = 0;
+
+	private static final String[] _table = { " Dis ", " En  ", "Hold " };
+
 	public static void OnUnderrun() {
 		System.out.format("%s\n", "UNDERRUN");
 	}
+
 	public static void OnNoProgress() {
 		System.out.format("%s\n", "NOPROGRESS");
 	}
-	static private String StrOutputEnable(CANTalon.SetValueMotionProfile sv)
-	{
-		if(sv == null)
+
+	static private String StrOutputEnable(CANTalon.SetValueMotionProfile sv) {
+		if (sv == null)
 			return "null";
-		if(sv.value > 3)
+		if (sv.value > 3)
 			return "Inval";
 		return _table[sv.value];
 	}
+
 	/** round to six decimal places */
-	static private double round(double toround)
-	{
-		long whole = (long)(toround * 1000000.0 + 0.5);
-		return ((double)whole) * 0.000001;
+	static private double round(double toround) {
+		long whole = (long) (toround * 1000000.0 + 0.5);
+		return ((double) whole) * 0.000001;
 	}
-	public static void process(CANTalon.MotionProfileStatus status1) {
+
+	private String spaces = "       ";
+
+	public void process(CANTalon.MotionProfileStatus status1) {
 		double now = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-		if((now-timeout) > 0.2){
+		if ((now - timeout) > 0.1) {
 			timeout = now;
 			/* fire a loop every 200ms */
 
-			if(--count <= 0){
+			if (--count <= 0) {
 				count = 8;
 				/* every 8 loops, print our columns */
-				
+				System.out.format(spaces);
 				System.out.format("%-9s\t", "topCnt");
 				System.out.format("%-9s\t", "btmCnt");
 				System.out.format("%-9s\t", "set val");
@@ -77,6 +90,12 @@ public class instrumentation {
 				System.out.format("\n");
 			}
 			/* every loop, print our values */
+			int numSpace = spaces.length() - name.length();
+			String s = "";
+			for (int i = 0; i < numSpace; i++) {
+				s = s + " ";
+			}
+			System.out.format(name + s);
 			System.out.format("%-9s\t", status1.topBufferCnt);
 			System.out.format("%-9s\t", status1.btmBufferCnt);
 			System.out.format("%-9s\t", StrOutputEnable(status1.outputEnable));
@@ -85,8 +104,8 @@ public class instrumentation {
 			System.out.format("%-9s\t", (status1.activePointValid ? "1" : ""));
 			System.out.format("%-9s\t", (status1.activePoint.isLastPoint ? "1" : ""));
 			System.out.format("%-9s\t", (status1.activePoint.velocityOnly ? "1" : ""));
-			System.out.format("%-9s\t", round(status1.activePoint.position));
-			System.out.format("%-9s\t", round(status1.activePoint.velocity));
+			System.out.format("%-9s\t", Drivetrain.revToInches(round(status1.activePoint.position)));
+			System.out.format("%-9s\t", Drivetrain.revToInches(round(status1.activePoint.velocity)));
 
 			System.out.format("\n");
 		}

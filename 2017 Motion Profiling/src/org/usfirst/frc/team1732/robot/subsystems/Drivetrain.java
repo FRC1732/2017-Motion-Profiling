@@ -61,12 +61,12 @@ public class Drivetrain extends Subsystem {
 	public static final boolean REVERSE_RIGHT_ENCODER = false;
 
 	public static final double MAX_ALLOWED_VELOCITY = 750; // RMP
-	public static final double MAX_ALLOWED_ACCELERATION = 1000; // RPM/sec
+	public static final double MAX_ALLOWED_ACCELERATION = 600; // RPM/sec
 	public static final double MAX_ALLOWED_JERK = MAX_ALLOWED_ACCELERATION * 30; // RPM/sec/sec, this is the ratio
 																					// PathFinder used
 
-	public static final double MAX_LEFT_RPM = 780;
-	public static final double MAX_RIGHT_RPM = 800;
+	public static final double MAX_LEFT_RPM = 830; // 780
+	public static final double MAX_RIGHT_RPM = 830; // 800
 
 	public static final CANTalon.VelocityMeasurementPeriod VELOCITY_MEASUREMENT_PERIOD = CANTalon.VelocityMeasurementPeriod.Period_1Ms;
 	public static final int VELOCITY_MEASUREMENT_WINDOW = 10; // ms
@@ -84,8 +84,8 @@ public class Drivetrain extends Subsystem {
 		configureTalonEncoders();
 		setBrakeMode(true);
 
-		leftManage = new MotionProfileManager(leftMaster);
-		rightManage = new MotionProfileManager(rightMaster);
+		leftManage = new MotionProfileManager("Left", leftMaster);
+		rightManage = new MotionProfileManager("Right", rightMaster);
 
 		motionMagic = new MotionMagicPair(leftMM, rightMM);
 
@@ -153,15 +153,15 @@ public class Drivetrain extends Subsystem {
 	private final double fLeft = 1023 / (MAX_LEFT_RPM / 60.0 / 10.0 * ENCODER_CODES_PER_REV);
 	private final double fRight = 1023 / (MAX_RIGHT_RPM / 60.0 / 10.0 * ENCODER_CODES_PER_REV);
 
-	private final double leftPScale = 256;
+	private final double leftPScale = 226;
 	private final double leftIScale = 1;
-	private final double leftDScale = 5.5;
+	private final double leftDScale = 16.4;
 	private final double leftFScale = 1;
 
-	private final double rightPScale = 256;
+	private final double rightPScale = 226;
 	private final double rightIScale = 1;
-	private final double rightDScale = 5.5;
-	private final double rightFScale = 1.1;
+	private final double rightDScale = 16.4;
+	private final double rightFScale = 1; // 1.1
 
 	private void setMotionMagicPID() {
 		SmartDashboard.putNumber("Left P scale", leftPScale);

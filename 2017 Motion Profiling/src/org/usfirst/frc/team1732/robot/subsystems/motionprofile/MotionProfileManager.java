@@ -33,6 +33,8 @@ import jaci.pathfinder.Trajectory;
 
 public class MotionProfileManager {
 
+	private final instrumentation inst;
+
 	private Trajectory trajectory;
 
 	/**
@@ -107,14 +109,15 @@ public class MotionProfileManager {
 	 * @param talon
 	 *            reference to Talon object to fetch motion profile status from.
 	 */
-	public MotionProfileManager(CANTalon talon) {
+	public MotionProfileManager(String side, CANTalon talon) {
+		inst = new instrumentation(side);
 		_talon = talon;
 		/*
 		 * since our MP is 10ms per point, set the control frame rate and the notifer to
 		 * half that
 		 */
 		_talon.changeMotionControlFramePeriod((int) (Path.TIME_STEP * 1000));
-		_notifer.startPeriodic(0.005);
+		_notifer.startPeriodic(0.002);
 	}
 
 	/**
@@ -231,7 +234,7 @@ public class MotionProfileManager {
 			}
 		}
 		/* printfs and/or logging */
-		instrumentation.process(_status);
+		inst.process(_status);
 	}
 
 	/** Start filling the MPs to all of the involved Talons. */
@@ -241,7 +244,8 @@ public class MotionProfileManager {
 	}
 
 	private void startFilling(Trajectory traj) {
-
+		System.out.println("Started filling");
+		long start = System.currentTimeMillis();
 		/* create an empty point */
 		CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
 
@@ -281,6 +285,7 @@ public class MotionProfileManager {
 
 			_talon.pushMotionProfileTrajectory(point);
 		}
+		System.out.println("Time to fill: " + (System.currentTimeMillis() - start));
 	}
 
 	private boolean finished = false;
