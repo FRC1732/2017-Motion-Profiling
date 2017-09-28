@@ -116,7 +116,7 @@ public class MotionProfileManager {
 		 * since our MP is 10ms per point, set the control frame rate and the notifer to
 		 * half that
 		 */
-		_talon.changeMotionControlFramePeriod((int) (Path.TIME_STEP * 1000));
+		_talon.changeMotionControlFramePeriod((int) (ProfileConfigs.TIME_STEP * 1000));
 		_notifer.startPeriodic(0.002);
 	}
 

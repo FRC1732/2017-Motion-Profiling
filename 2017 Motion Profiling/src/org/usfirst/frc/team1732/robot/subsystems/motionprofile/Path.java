@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1732.robot.subsystems.motionprofile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.usfirst.frc.team1732.robot.subsystems.Drivetrain;
 
 import jaci.pathfinder.Pathfinder;
@@ -9,49 +12,53 @@ import jaci.pathfinder.modifiers.TankModifier;
 
 public class Path {
 
-	// Create the Trajectory Configuration
-	//
-	// Arguments:
-	// Fit Method: HERMITE_CUBIC or HERMITE_QUINTIC
-	// Sample Count: SAMPLES_HIGH (100 000)
-	// SAMPLES_LOW (10 000)
-	// SAMPLES_FAST (1 000)
-	// Time Step: 0.01 Seconds
-	// Max Velocity: 1.7 m/s
-	// Max Acceleration: 2.0 m/s/s
-	// Max Jerk: 60.0 m/s/s/s
-
-	// divide by 60 because the velocity/acceleration/jerk start out in terms of
-	// RPM, divide by 60 so that they become revolutions per second
-	// then convert from revolutions to inches
-
-	public static final double TIME_STEP = 0.01;
-
-	public static final Trajectory.Config basicConfig = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,
-			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60),
-			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60),
-			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_JERK / 60));
-
-	public static final Trajectory.Config slowConfig = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,
-			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60 / 5),
-			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60 / 5),
-			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_JERK / 60));
-	private final Waypoint[] points;
+	private final ArrayList<Waypoint> points;
 	private final Trajectory.Config config;
 
-	public final Trajectory leftTraj;
-	public final Trajectory rightTraj;
+	private Trajectory leftTraj;
+	private Trajectory rightTraj;
 
-	public Path(Waypoint[] points, Trajectory.Config config) {
+	public Path(Trajectory.Config config) {
+		this.config = config;
+		this.points = new ArrayList<Waypoint>();
+	}
+
+	public Path(Trajectory.Config config, Waypoint[] w) {
+		this(config);
+		points.addAll(Arrays.asList(w));
+	}
+
+	public Trajectory getLeft() {
+		return leftTraj;
+	}
+
+	public Trajectory getRight() {
+		return rightTraj;
+	}
+
+	public void addWaypoint(double x, double y, double heading) {
+		points.add(new Waypoint(x, y, heading));
+	}
+
+	public void addWaypoint(Waypoint w) {
+		points.add(w);
+	}
+
+	public void addWaypoints(Waypoint[] w) {
+		points.addAll(Arrays.asList(w));
+	}
+
+	void create() {
 		System.out.println("Making Path");
 		long start = System.currentTimeMillis();
-		this.points = points;
-		this.config = config;
-		Trajectory traj = Pathfinder.generate(points, config);
+
+		Trajectory traj = Pathfinder.generate(points.toArray(new Waypoint[] {}), config);
 		TankModifier tank = new TankModifier(traj);
 		tank.modify(Drivetrain.ROBOT_WIDTH_INCHES);
+
 		leftTraj = tank.getLeftTrajectory();
 		rightTraj = tank.getRightTrajectory();
+
 		System.out.println("Time to make path: " + (System.currentTimeMillis() - start));
 	}
 

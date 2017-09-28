@@ -6,7 +6,7 @@ import org.usfirst.frc.team1732.robot.oi.OI;
 import org.usfirst.frc.team1732.robot.robotmaps.RobotMap2017;
 import org.usfirst.frc.team1732.robot.robotmaps.RobotMap2017PracticeBot;
 import org.usfirst.frc.team1732.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team1732.robot.subsystems.motionprofile.MotionPath;
+import org.usfirst.frc.team1732.robot.subsystems.motionprofile.MotionPaths;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -27,11 +27,6 @@ public class Robot extends IterativeRobot {
 		RobotMap = new RobotMap2017PracticeBot();
 		oi = new OI(OI.dualJoystick);
 		drivetrain = new Drivetrain();
-
-		// access each element to make paths
-		for (MotionPath mp : MotionPath.values()) {
-			// Trajectory t = mp.leftTraj;
-		}
 	}
 
 	@Override
@@ -45,7 +40,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = new FollowTrajectory(MotionPath.ARC.leftTraj, MotionPath.ARC.rightTraj);
+		autonomousCommand = new FollowTrajectory(MotionPaths.ARC.getLeft(), MotionPaths.ARC.getRight());
 		// autonomousCommand = new DriveArc(DriveArc.degreesToDistance(90, 50),
 		// 50, 600, 400, true);
 		// schedule the autonomous command (example)
