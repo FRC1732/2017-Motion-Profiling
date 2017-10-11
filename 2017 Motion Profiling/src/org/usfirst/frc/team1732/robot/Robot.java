@@ -7,6 +7,7 @@ import org.usfirst.frc.team1732.robot.robotmaps.RobotMap2017;
 import org.usfirst.frc.team1732.robot.robotmaps.RobotMap2017PracticeBot;
 import org.usfirst.frc.team1732.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1732.robot.subsystems.motionprofile.MotionPaths;
+import org.usfirst.frc.team1732.robot.subsystems.motionprofile.Path;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -27,6 +28,13 @@ public class Robot extends IterativeRobot {
 		RobotMap = new RobotMap2017PracticeBot();
 		oi = new OI(OI.dualJoystick);
 		drivetrain = new Drivetrain();
+		Thread t = new Thread() {
+			public void run() {
+				p.create(save, read);
+			}
+		};
+		t.setDaemon(true);
+		t.start();
 	}
 
 	@Override
@@ -38,9 +46,15 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 	}
 
+	private Path p = MotionPaths.YOU;
+	private boolean save = false;
+	private boolean read = false;
+
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = new FollowTrajectory(MotionPaths.ARC.getLeft(), MotionPaths.ARC.getRight());
+		if (p.isCreated()) {
+			autonomousCommand = new FollowTrajectory(p.getLeft(), p.getRight());
+		}
 		// autonomousCommand = new DriveArc(DriveArc.degreesToDistance(90, 50),
 		// 50, 600, 400, true);
 		// schedule the autonomous command (example)
@@ -63,6 +77,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		Robot.drivetrain.motionMagic.graphData();
 	}
 
 	@Override

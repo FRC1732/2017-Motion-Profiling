@@ -11,7 +11,6 @@ import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.StatusFrameRate;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Trajectory;
@@ -21,9 +20,9 @@ public class Drivetrain extends Subsystem {
 	public static final String NAME = "Drive Train";
 
 	public static final double ROBOT_WIDTH_INCHES = 26;
+	public static final double EFFECTIVE_ROBOT_WIDTH = ROBOT_WIDTH_INCHES * 1.1;
 	public static final double ROBOT_LENGTH_INCHES = 34.5;
 	public static final double TURNING_CIRCUMFERENCE = Math.PI * ROBOT_WIDTH_INCHES;
-	public static final double EFFECTIVE_TURNING_CIRCUMFERENCE = TURNING_CIRCUMFERENCE * 1;
 
 	// master is the motor that the other left motors follow
 	private final CANTalon leftMaster = new CANTalon(Robot.RobotMap.getLeftMasterMotorDeviceNumber());
@@ -38,8 +37,8 @@ public class Drivetrain extends Subsystem {
 	public final MotionProfileManager leftManage;
 	public final MotionProfileManager rightManage;
 
-	private final Solenoid shifter = new Solenoid(Robot.RobotMap.getPCM_CAN_ID(),
-			Robot.RobotMap.getShifterSolenoidDeviceNumber());
+	// private final Solenoid shifter = new Solenoid(Robot.RobotMap.getPCM_CAN_ID(),
+	// Robot.RobotMap.getShifterSolenoidDeviceNumber());
 
 	public static final boolean HIGH_GEAR = false; // false
 	public static final boolean LOW_GEAR = !HIGH_GEAR;
@@ -55,7 +54,7 @@ public class Drivetrain extends Subsystem {
 
 	public static final int ENCODER_CODES_PER_REV = 1365; // = 4096 / 3
 	// 4096 counts per encoder revolution, divided by 3 because of gearing
-	public static final double INCHES_PER_REV = 3.473 * Math.PI;
+	public static final double INCHES_PER_REV = 11.0331;
 
 	public static final boolean REVERSE_LEFT_ENCODER = true;
 	public static final boolean REVERSE_RIGHT_ENCODER = false;
@@ -111,7 +110,7 @@ public class Drivetrain extends Subsystem {
 		leftMaster.setVoltageCompensationRampRate(MAX_VOLTAGE * 2);
 		rightMaster.setVoltageCompensationRampRate(MAX_VOLTAGE * 2);
 		// ^ apparently above units are volts per 100 ms
-		shifter.set(HIGH_GEAR);
+		// shifter.set(HIGH_GEAR);
 		setControlMode(TalonControlMode.PercentVbus);
 	}
 

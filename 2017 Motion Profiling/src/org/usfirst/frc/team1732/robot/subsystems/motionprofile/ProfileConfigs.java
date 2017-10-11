@@ -25,8 +25,8 @@ public class ProfileConfigs {
 	public static final double TIME_STEP = 0.01;
 
 	public static final Trajectory.Config BASIC = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,
-			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60),
-			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60),
+			Trajectory.Config.SAMPLES_HIGH, TIME_STEP, Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_VELOCITY / 60 / 2),
+			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_ACCELERATION / 60 / 4),
 			Drivetrain.revToInches(Drivetrain.MAX_ALLOWED_JERK / 60));
 
 	public static final Trajectory.Config SLOW = new Trajectory.Config(Trajectory.FitMethod.HERMITE_QUINTIC,

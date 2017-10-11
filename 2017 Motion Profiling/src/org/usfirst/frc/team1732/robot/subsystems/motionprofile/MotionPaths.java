@@ -1,5 +1,9 @@
 package org.usfirst.frc.team1732.robot.subsystems.motionprofile;
 
+import java.util.ArrayList;
+
+import jaci.pathfinder.Waypoint;
+
 // i just wanted this for testing temporarily, this is probably a bad way to organize the paths
 
 public class MotionPaths {
@@ -18,60 +22,81 @@ public class MotionPaths {
 	 * gyroscope is zero'd to.
 	 */
 
-	// PATH1(new Waypoint[] { new Waypoint(-4, -1, Pathfinder.d2r(-45)), new
-	// Waypoint(-2, -2, 0), new Waypoint(0, 0, 0) },
-	// Path.basicConfig),
+	/*
+	 * this is like this (uses addWaypoint and create instead of passing it to
+	 * constructor all at once) because in the future I think we won't want to
+	 * define all our paths at once - instead only create the ones that are
+	 * necessary, and create them locally.
+	 * 
+	 */
 
-	// this is like this (uses addWaypoint and create instead of passing it to
-	// constructor all at once) because in the future I think we won't want to
-	// define all
-	// our paths at once - instead only create the ones that are necessary
-
-	public static final Path STRAIGHT = new Path(ProfileConfigs.BASIC);
+	public static final Path STRAIGHT;
 	static {
-		STRAIGHT.addWaypoint(0, 0, 0);
-		STRAIGHT.addWaypoint(30, 0, 0);
-		STRAIGHT.create();
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(30, 0, 0));
+		STRAIGHT = new Path(ProfileConfigs.BASIC, points);
 	}
 
-	public static final Path STRAIGHTFAR = new Path(ProfileConfigs.BASIC);
+	public static final Path STRAIGHTFAR;
 	static {
-		STRAIGHTFAR.addWaypoint(0, 0, 0);
-		STRAIGHTFAR.addWaypoint(80, 0, 0);
-		STRAIGHTFAR.create();
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(80, 0, 0));
+		STRAIGHTFAR = new Path(ProfileConfigs.SLOW, points);
 	}
 
-	public static final Path ARC = new Path(ProfileConfigs.BASIC);
+	public static final Path ARC;
 	static {
-		ARC.addWaypoint(0, 0, 0);
-		ARC.addWaypoint(25, 6.699, Math.PI / 6);
-		ARC.addWaypoint(35.355, 14.645, Math.PI / 4);
-		ARC.addWaypoint(43.301, 25, Math.PI / 3);
-		ARC.addWaypoint(50, 50, Math.PI / 2);
-		ARC.create();
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(25, 6.699, Math.PI / 6));
+		points.add(new Waypoint(35.355, 14.645, Math.PI / 4));
+		points.add(new Waypoint(43.301, 25, Math.PI / 3));
+		points.add(new Waypoint(50, 50, Math.PI / 2));
+		ARC = new Path(ProfileConfigs.BASIC, points);
 	}
 
-	public static final Path CURVEY = new Path(ProfileConfigs.SLOW);
+	public static final Path SIMPLE_ARC;
 	static {
-		CURVEY.addWaypoint(0, 0, 0);
-		CURVEY.addWaypoint(40, 20, Math.PI / 4);
-		CURVEY.addWaypoint(80, 20, -Math.PI / 4);
-		CURVEY.create();
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(50, 50, Math.PI / 2));
+		SIMPLE_ARC = new Path(ProfileConfigs.BASIC, points);
 	}
 
-	public static final Path YOU = new Path(ProfileConfigs.BASIC);
+	public static final Path CURVEY;
 	static {
-		YOU.addWaypoint(0, 0, 0);
-		YOU.addWaypoint(40, 40, Math.PI / 2);
-		YOU.addWaypoint(0, 80, -Math.PI);
-		YOU.create();
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(40, 20, Math.PI / 4));
+		points.add(new Waypoint(80, 20, -Math.PI / 4));
+		CURVEY = new Path(ProfileConfigs.SLOW, points);
+	}
+
+	public static final Path YOU;
+	static {
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(60, 40, Math.PI / 2));
+		points.add(new Waypoint(0, 80, Math.PI));
+		YOU = new Path(ProfileConfigs.SLOW, points);
+	}
+
+	public static final Path YOU2;
+	static {
+		ArrayList<Waypoint> points = new ArrayList<Waypoint>();
+		points.add(new Waypoint(0, 0, 0));
+		points.add(new Waypoint(65, 40, Math.PI / 2));
+		points.add(new Waypoint(15, 70, Math.PI + 0.401));
+		YOU2 = new Path(ProfileConfigs.SLOW, points);
 	}
 
 	// "invalid trajectory"
 	// public static final Path TURN = new Path(ProfileConfigs.SLOW);
 	// static {
-	// TURN.addWaypoint(0, 0, 0);
-	// TURN.addWaypoint(0, 0, -Math.PI);
+	// TURN.add(new Waypoint(0, 0, 0);
+	// TURN.add(new Waypoint(0, 0, -Math.PI);
 	// TURN.create();
 	// }
 
