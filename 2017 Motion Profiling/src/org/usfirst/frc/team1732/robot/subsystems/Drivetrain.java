@@ -54,7 +54,7 @@ public class Drivetrain extends Subsystem {
 
 	public static final int ENCODER_CODES_PER_REV = 1365; // = 4096 / 3
 	// 4096 counts per encoder revolution, divided by 3 because of gearing
-	public static final double INCHES_PER_REV = 11.0331;
+	public static final double INCHES_PER_REV = 11.0331; // 4 * Math.PI; //
 
 	public static final boolean REVERSE_LEFT_ENCODER = true;
 	public static final boolean REVERSE_RIGHT_ENCODER = false;

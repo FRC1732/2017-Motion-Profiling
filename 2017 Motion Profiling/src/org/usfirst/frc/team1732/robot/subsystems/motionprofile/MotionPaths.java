@@ -80,6 +80,7 @@ public class MotionPaths {
 		points.add(new Waypoint(0, 0, 0));
 		points.add(new Waypoint(60, 40, Math.PI / 2));
 		points.add(new Waypoint(0, 80, Math.PI));
+		points.add(new Waypoint(-20, 80, Math.PI));
 		YOU = new Path(ProfileConfigs.SLOW, points);
 	}
 

@@ -30,7 +30,7 @@ public class Robot extends IterativeRobot {
 		drivetrain = new Drivetrain();
 		Thread t = new Thread() {
 			public void run() {
-				p.create(save, read);
+				p.create();
 			}
 		};
 		t.setDaemon(true);

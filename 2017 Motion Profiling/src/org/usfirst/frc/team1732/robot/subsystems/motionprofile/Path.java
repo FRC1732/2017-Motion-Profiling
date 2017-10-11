@@ -63,7 +63,7 @@ public class Path {
 	//
 	// created = true;
 
-	public void create(boolean save, boolean read) {
+	public void create() {
 		if (!created) {// && !read) {
 			System.out.println("Making Path");
 			long start = System.currentTimeMillis();
